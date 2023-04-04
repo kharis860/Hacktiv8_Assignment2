@@ -1,4 +1,5 @@
 const fs = require("fs");
+const { generateToken } = require("../helpers/jwt");
 
 module.exports = {
   login: (req, res) => {
@@ -7,19 +8,28 @@ module.exports = {
         console.log(err);
         return;
       }
-      console.log(data.toString("utf8"));
-      //       console.log(data.toJSON);
+
       const user = data.toString("utf8");
       const users = JSON.parse(user);
-      console.log(users[0].username, "ini tes");
       const { username, password } = req.body;
-      console.log(username);
-      console.log(password);
+
       const isAuth = username === users[0].username && password === users[0].password;
-      console.log(isAuth);
-      res.status(200).json({
-        message: "succes get data",
-      });
+      if (isAuth) {
+        try {
+          const payload = {
+            id: users[0].id,
+            username: users[0].username,
+          };
+          console.log(payload, "ini payload");
+          const token = generateToken(payload);
+          res.status(200).json({
+            message: "succes login",
+            token,
+          });
+        } catch (error) {
+          res.status(error?.code || 500).json(error);
+        }
+      }
     });
   },
 };

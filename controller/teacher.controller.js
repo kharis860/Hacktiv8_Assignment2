@@ -1,7 +1,11 @@
 const fs = require("fs");
+const { compareToken } = require("../helpers/jwt");
 
 module.exports = {
   getAllTeacher: (req, res) => {
+    const tokenAuth = req.headers.authorization.split(" ")[1];
+    const auth = compareToken(tokenAuth);
+    console.log(auth);
     fs.readFile("../assignment 2/data/teachers.json", (err, data) => {
       if (err) {
         console.log(err);
