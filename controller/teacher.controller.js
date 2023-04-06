@@ -2,6 +2,7 @@ const fs = require("fs");
 
 module.exports = {
   getAllTeacher: (req, res) => {
+    // autentikasi jwt dilakukan pada index router
     fs.readFile("../assignment 2/data/teachers.json", (err, data) => {
       //kondisional error read file
       if (err) {
